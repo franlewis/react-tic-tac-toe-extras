@@ -23,35 +23,46 @@ function Square(props) {
 class Board extends React.Component {
 
     renderSquare(i) {
-      return (
-        <Square 
-            value={this.props.squares[i]} 
-            onClick={() => this.props.onClick(i)}
-        />
-      );
-    }
-  
-    render() {
         return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
+            <Square 
+                value={this.props.squares[i]} 
+                onClick={() => this.props.onClick(i)}
+            />
         );
     }
+
+    renderRow(row) {
+
+        const squaresPerRow = 3;
+        const squares = [];
+        const offset = row * squaresPerRow; // this makes sure first row is 0,1,2, second row is 3,4,5, etc.
+        for (let s = 0; s < squaresPerRow; s++) {
+          squares.push(
+            this.renderSquare(offset + s)
+          );
+        }
+        return (
+          <div className="board-row">
+            {squares}
+          </div>
+        )
+      }
+    
+ 
+    render() {
+        // these can also be passed in as `props` 
+        // if you want to use them like `<Board totalRows={3} squaresPerRow={3} squares={...}/>`
+        const totalRows = 3;
+
+        const rows = [];
+        for (let r = 0; r < totalRows; r++) {
+            rows.push(
+            this.renderRow(r)
+            );
+        }
+        return <div>{rows}</div>;
+    }
+          
 }
   
 class Game extends React.Component {
@@ -95,6 +106,7 @@ class Game extends React.Component {
         stepNumber: step,
         xIsNext: (step % 2) === 0,
       });
+      console.log(step);
       
     }
 
